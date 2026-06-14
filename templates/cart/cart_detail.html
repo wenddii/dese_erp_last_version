@@ -1,0 +1,12 @@
+{% for item in items %}
+  <div>
+    {{ item.product.name }} —
+    {{ item.quantity }} × {{ item.product.selling_price }}
+
+    <a href="{% url 'remove_cart' item.product.id %}">Remove</a>
+  </div>
+{% endfor %}
+
+<h3>Total: {{ total }}</h3>
+
+<a href="{% url 'checkout' %}">Complete Sale</a>

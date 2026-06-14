@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-slate-900">
+            Record Vendor Restock
+        </h1>
+        <p class="text-slate-500 text-sm">
+            Adding a purchase updates stock levels and recalculates weighted average cost.
+        </p>
+    </div>
+
+    <!-- Warning Info -->
+    <div class="mb-6 p-4 rounded-lg border border-amber-200 bg-amber-50 text-sm text-amber-800">
+        <strong>Note:</strong> This purchase will immediately update product stock and adjust the average cost price used for profit calculations.
+    </div>
+
+    <!-- Form Container -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+
+        <form method="POST" class="p-6 space-y-6">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 gap-6">
+
+                {% for field in form %}
+                <div class="flex flex-col gap-1.5">
+
+                    <label for="{{ field.id_for_label }}" class="text-sm font-semibold text-slate-700">
+                        {{ field.label }}
+                    </label>
+
+                    <div class="relative">
+                        {{ field }}
+                    </div>
+
+                    {% if field.help_text %}
+                        <p class="text-xs text-slate-400">{{ field.help_text }}</p>
+                    {% endif %}
+
+                    {% if field.errors %}
+                        <p class="text-xs text-rose-600 font-medium">
+                            {{ field.errors.0 }}
+                        </p>
+                    {% endif %}
+
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <!-- Impact Summary (optional UX improvement) -->
+            <div class="p-4 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-600">
+                <p><strong>System behavior:</strong></p>
+                <ul class="list-disc ml-5 mt-2 space-y-1">
+                    <li>Stock will increase immediately</li>
+                    <li>Product cost price will be recalculated (weighted average)</li>
+                    <li>Future profit calculations will use updated cost</li>
+                </ul>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-100">
+
+                <a href="{% url 'purchase_list' %}"
+                   class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-lg shadow-sm transition">
+                    Confirm Purchase
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<style>
+input, select, textarea {
+    display: block;
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    background-color: #fff;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+</style>
+
+{% endblock %}

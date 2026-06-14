@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- HEADER -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">
+                Business Analytics
+            </h1>
+            <p class="text-slate-500 mt-1">
+                Financial performance, profitability tracking, and operational insights.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- HERO KPI -->
+    <div class="rounded-3xl bg-gradient-to-r from-slate-900 to-slate-700 text-white p-8 shadow-lg">
+
+        <div class="text-sm uppercase tracking-wider opacity-80">
+            Net Profit (Selected Period)
+        </div>
+
+        <div class="text-4xl font-bold mt-3">
+            ${{ period_profit|floatformat:2 }}
+        </div>
+
+        <div class="text-slate-300 mt-2 text-sm">
+            Revenue ${{ period_revenue|floatformat:2 }} • Expenses ${{ period_expenses|floatformat:2 }}
+        </div>
+
+    </div>
+
+    <!-- FILTERS -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+
+        <form method="GET" class="space-y-4">
+
+            <div class="flex flex-col md:flex-row gap-4 md:items-end">
+
+                <div>
+                    <label class="text-sm text-slate-600">Start Date</label>
+                    <input type="date"
+                           name="start_date"
+                           value="{{ start_date_val }}"
+                           class="w-full mt-1 rounded-xl border border-slate-300 px-4 py-2">
+                </div>
+
+                <div>
+                    <label class="text-sm text-slate-600">End Date</label>
+                    <input type="date"
+                           name="end_date"
+                           value="{{ end_date_val }}"
+                           class="w-full mt-1 rounded-xl border border-slate-300 px-4 py-2">
+                </div>
+
+                <button type="submit"
+                        class="px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium">
+                    Apply Filter
+                </button>
+
+                {% if start_date_val or end_date_val %}
+                <a href="{% url 'business_reports' %}"
+                   class="px-5 py-3 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700">
+                    Clear
+                </a>
+                {% endif %}
+
+            </div>
+
+        </form>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+
+            <a href="?days=1" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-sm">Today</a>
+            <a href="?days=7" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-sm">7 Days</a>
+            <a href="?days=30" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-sm">30 Days</a>
+            <a href="?days=365" class="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-sm">1 Year</a>
+
+        </div>
+
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition">
+            <p class="text-sm text-slate-500">Revenue</p>
+            <p class="text-3xl font-bold text-emerald-600 mt-2">
+                ${{ period_revenue|floatformat:2 }}
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition">
+            <p class="text-sm text-slate-500">Expenses</p>
+            <p class="text-3xl font-bold text-red-600 mt-2">
+                ${{ period_expenses|floatformat:2 }}
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition">
+            <p class="text-sm text-slate-500">Net Profit</p>
+            <p class="text-3xl font-bold mt-2 {% if period_profit >= 0 %}text-emerald-600{% else %}text-red-600{% endif %}">
+                ${{ period_profit|floatformat:2 }}
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BAR CHART (REPLACED FROM LINE) -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+
+        <h2 class="font-semibold text-lg mb-4">
+            Revenue vs Expenses Overview
+        </h2>
+
+        <canvas id="financeChart" height="90"></canvas>
+
+    </div>
+
+    <!-- PRODUCT PERFORMANCE (PROGRESS STYLE) -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h2 class="font-semibold text-lg">
+                Product Performance
+            </h2>
+        </div>
+
+        <div class="p-6 space-y-5">
+
+            {% for item in product_performance %}
+
+            <div>
+
+                <div class="flex justify-between text-sm mb-1">
+                    <span class="font-medium text-slate-700">
+                        {{ item.product__name }}
+                    </span>
+
+                    <span class="text-emerald-600 font-semibold">
+                        ${{ item.total_revenue|floatformat:2 }}
+                    </span>
+                </div>
+
+                <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                    <div class="h-3 bg-emerald-500 rounded-full"
+                         style="width: {{ item.units_sold }}%"></div>
+                </div>
+
+                <div class="text-xs text-slate-400 mt-1">
+                    {{ item.units_sold }} units sold
+                </div>
+
+            </div>
+
+            {% empty %}
+            <p class="text-slate-500 text-center py-6">
+                No product data available
+            </p>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <!-- DAILY TIMELINE (CARD STYLE) -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h2 class="font-semibold text-lg">
+                Financial Timeline
+            </h2>
+        </div>
+
+        <div class="p-6 space-y-3">
+
+            {% for day in daily_report %}
+
+            <div class="flex justify-between items-center p-4 rounded-xl border border-slate-100 hover:bg-slate-50">
+
+                <div>
+                    <div class="font-semibold">
+                        {{ day.day|date:"M d, Y" }}
+                    </div>
+                    <div class="text-xs text-slate-500">
+                        Revenue: ${{ day.revenue|floatformat:2 }}
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <div class="{% if day.net_earnings >= 0 %}text-emerald-600{% else %}text-red-600{% endif %} font-bold">
+                        ${{ day.net_earnings|floatformat:2 }}
+                    </div>
+                    <div class="text-xs text-slate-400">
+                        Net
+                    </div>
+                </div>
+
+            </div>
+
+            {% empty %}
+            <p class="text-center text-slate-500 py-6">
+                No timeline data available
+            </p>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CHART SCRIPT -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('financeChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [
+            {% for day in daily_report %}
+                "{{ day.day|date:'Y-m-d' }}",
+            {% endfor %}
+        ],
+        datasets: [
+            {
+                label: 'Revenue',
+                data: [
+                    {% for day in daily_report %}
+                        {{ day.revenue }},
+                    {% endfor %}
+                ],
+                backgroundColor: '#10b981',
+                borderRadius: 8
+            },
+            {
+                label: 'Expenses',
+                data: [
+                    {% for day in daily_report %}
+                        {{ day.expense }},
+                    {% endfor %}
+                ],
+                backgroundColor: '#ef4444',
+                borderRadius: 8
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' }
+        },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
+
+{% endblock %}

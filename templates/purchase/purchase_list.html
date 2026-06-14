@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">
+                Procurement Ledger
+            </h1>
+            <p class="text-slate-500 mt-1">
+                Track supplier shipments, costs, and inventory inflow.
+            </p>
+        </div>
+
+        <a href="{% url 'purchase_create' %}"
+           class="px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium">
+            + New Purchase
+        </a>
+
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+            <p class="text-sm text-slate-500">Total Batches</p>
+            <p class="text-3xl font-bold text-slate-900 mt-2">
+                {{ batches|length }}
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+            <p class="text-sm text-slate-500">Total Spend</p>
+            <p class="text-3xl font-bold text-emerald-600 mt-2">
+                ${{ total_spent|default:"0.00" }}
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+            <p class="text-sm text-slate-500">Latest Batch</p>
+            <p class="text-lg font-semibold text-slate-900 mt-2">
+                {% if batches %}
+                    {{ batches.0.batch_number }}
+                {% else %}
+                    None
+                {% endif %}
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h2 class="font-semibold text-lg">
+                Purchase History
+            </h2>
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead class="bg-slate-50">
+
+                    <tr>
+                        <th class="text-left px-6 py-4">Batch</th>
+                        <th class="text-left px-6 py-4">Date</th>
+                        <th class="text-left px-6 py-4">Product</th>
+                        <th class="text-left px-6 py-4">Qty</th>
+                        <th class="text-left px-6 py-4">Cost</th>
+                        <th class="text-left px-6 py-4">Total</th>
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+
+                    {% for batch in batches %}
+
+                    <tr class="hover:bg-slate-50">
+
+                        <td class="px-6 py-4 font-semibold">
+                            {{ batch.batch_number }}
+                        </td>
+
+                        <td class="px-6 py-4 text-slate-500">
+                            {{ batch.purchase_date|date:"Y-m-d H:i" }}
+                        </td>
+
+                        <td class="px-6 py-4 font-medium">
+                            {{ batch.product.name }}
+                        </td>
+
+                        <td class="px-6 py-4">
+                            +{{ batch.quantity_bought }}
+                        </td>
+
+                        <td class="px-6 py-4">
+                            ${{ batch.cost_price|floatformat:2 }}
+                        </td>
+
+                        <td class="px-6 py-4 font-semibold text-emerald-600">
+                            ${{ batch.total_cost|floatformat:2 }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="6" class="text-center py-16 text-slate-500">
+                            No purchase records found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

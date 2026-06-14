@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="space-y-8">
+
+<!-- HEADER -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+    <div>
+        <h1 class="text-3xl font-bold text-slate-900">
+            Product Inventory
+        </h1>
+
+        <p class="text-slate-500 mt-1">
+            Instant search and category filtering for inventory management.
+        </p>
+    </div>
+
+    <!-- ADD PRODUCT BUTTON (RESTORED) -->
+    <a href="{% url 'product_create' %}"
+       class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow-lg transition">
+        <span class="text-lg">+</span>
+        Add Product
+    </a>
+
+</div>
+
+<!-- FILTER BAR -->
+<div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 flex flex-col lg:flex-row gap-4 lg:items-center">
+
+    <input
+        id="searchInput"
+        type="text"
+        placeholder="Search products..."
+        class="flex-1 px-5 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"
+    >
+
+    <select
+        id="categoryFilter"
+        class="px-5 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"
+    >
+        <option value="all">All Categories</option>
+
+        {% for cat in categories %}
+            <option value="{{ cat.name|lower }}">
+                {{ cat.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+</div>
+
+<!-- PRODUCT GRID -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+    {% for product in products %}
+
+    <div class="product-card bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition"
+         data-name="{{ product.name|lower }}"
+         data-category="{{ product.category.name|lower }}">
+
+        <!-- IMAGE -->
+        <div class="h-44 bg-slate-100 flex items-center justify-center">
+
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="w-full h-full object-cover">
+            {% else %}
+                <div class="text-5xl">📦</div>
+            {% endif %}
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="p-5 space-y-3">
+
+            <div>
+                <h3 class="font-bold text-slate-900 text-lg">
+                    {{ product.name }}
+                </h3>
+
+                <p class="text-xs text-slate-500">
+                    Product #{{ product.id }}
+                </p>
+            </div>
+
+            <div class="flex justify-between items-center">
+
+                <span class="px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-medium">
+                    {{ product.category.name }}
+                </span>
+
+                {% if product.current_stock <= product.minimum_stock %}
+                    <span class="px-3 py-1 rounded-full bg-red-50 text-red-600 text-xs font-medium">
+                        Low Stock
+                    </span>
+                {% else %}
+                    <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-medium">
+                        Healthy
+                    </span>
+                {% endif %}
+
+            </div>
+
+            <div class="flex justify-between text-sm text-slate-600">
+                <span>Stock</span>
+                <span class="font-bold text-slate-900">
+                    {{ product.current_stock }}
+                </span>
+            </div>
+
+            <!-- DELETE BUTTON -->
+            <form action="{% url 'product_delete' product.id %}" method="POST">
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    onclick="return confirm('Delete this product?')"
+                    class="w-full mt-3 px-4 py-2 rounded-2xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition font-medium"
+                >
+                    Delete Product
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</div>
+
+<!-- LIVE SEARCH SCRIPT -->
+<script>
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const products = document.querySelectorAll(".product-card");
+
+function filterProducts() {
+    const search = searchInput.value.toLowerCase();
+    const category = categoryFilter.value;
+
+    products.forEach(card => {
+        const name = card.dataset.name;
+        const cat = card.dataset.category;
+
+        const matchSearch = name.includes(search);
+        const matchCategory = category === "all" || cat === category;
+
+        card.style.display = (matchSearch && matchCategory) ? "block" : "none";
+    });
+}
+
+searchInput.addEventListener("input", filterProducts);
+categoryFilter.addEventListener("change", filterProducts);
+</script>
+
+{% endblock %}
