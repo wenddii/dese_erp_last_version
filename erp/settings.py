@@ -3,8 +3,9 @@ import os
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
-
+if os.path.exists(BASE_DIR / ".env"):
+    load_dotenv(BASE_DIR / ".env")
+print("DB_HOST =", os.getenv("DB_HOST"))
 # -----------------------
 # CORE SECURITY SETTINGS
 # -----------------------
