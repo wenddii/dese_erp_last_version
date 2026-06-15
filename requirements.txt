@@ -25,6 +25,7 @@ pyinstaller==6.20.0
 pyinstaller-hooks-contrib==2026.5
 PyJWT==2.12.1
 python-decouple==3.8
+python-dotenv==1.2.2
 pythonnet==3.1.0
 pywebview==6.2.1
 pywin32-ctypes==0.2.3
