@@ -1,16 +1,21 @@
 altgraph==0.17.5
 asgiref==3.11.1
 bottle==0.13.4
+certifi==2026.5.20
 cffi==2.0.0
+charset-normalizer==3.4.7
 click==8.3.3
+cloudinary==1.44.2
 clr_loader==0.3.1
 colorama==0.4.6
 dj-database-url==3.1.2
 Django==6.0.2
+django-cloudinary-storage==0.3.0
 django-cors-headers==4.9.0
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
 gunicorn==25.1.0
+idna==3.18
 joblib==1.5.3
 langdetect==1.0.9
 nltk==3.9.4
@@ -31,6 +36,7 @@ pywebview==6.2.1
 pywin32-ctypes==0.2.3
 rank-bm25==0.2.2
 regex==2026.5.9
+requests==2.34.2
 scikit-learn==1.8.0
 scipy==1.17.1
 setuptools==82.0.1
@@ -40,4 +46,5 @@ threadpoolctl==3.6.0
 tqdm==4.67.3
 typing_extensions==4.15.0
 tzdata==2025.3
+urllib3==2.7.0
 whitenoise==6.12.0
