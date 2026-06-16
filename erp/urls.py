@@ -14,9 +14,10 @@ urlpatterns = [
     path('sales/', include('sales.urls')),
     path('purchases/', include('purchases.urls')),
     path('finance/', include('finance.urls')),
-    path("cart/", include("cart.urls")),
+    path('cart/', include('cart.urls')),
 ]
 
-# This appends the media directory to your URLs during development
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)
