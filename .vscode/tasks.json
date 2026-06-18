@@ -1,0 +1,117 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "django-check",
+			"type": "shell",
+			"command": "C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+			"args": [
+				"manage.py",
+				"check"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "django-check",
+			"type": "shell",
+			"command": "C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+			"args": [
+				"manage.py",
+				"check"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "django-check",
+			"type": "shell",
+			"command": "C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+			"args": [
+				"manage.py",
+				"check"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "django-check",
+			"type": "shell",
+			"command": "C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+			"args": [
+				"manage.py",
+				"check"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "django-check",
+			"type": "shell",
+			"command": "C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+			"args": [
+				"manage.py",
+				"check"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "django-check",
+			"type": "shell",
+			"command": "C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+			"args": [
+				"manage.py",
+				"check"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "django-check",
+			"type": "shell",
+			"command": "C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+			"args": [
+				"manage.py",
+				"check"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "django-check",
+			"type": "shell",
+			"command": "C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+			"args": [
+				"manage.py",
+				"check"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		}
+	]
+}
